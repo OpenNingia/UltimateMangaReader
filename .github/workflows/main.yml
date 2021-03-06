@@ -66,6 +66,7 @@ jobs:
         run: echo "::set-output name=upload_url::https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$(jq --raw-output '.release.id' $GITHUB_EVENT_PATH)/assets{?name,label}"  
         id: release
       - name: Upload Release Asset
+        if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,12 +76,10 @@ jobs:
           asset_name: UltimateMangaReader
           asset_content_type: application/octet-stream
           
-#       - name: Upload required libs
-#         uses: actions/upload-release-asset@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           upload_url: ${{ steps.release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-#           asset_path: libs.zip
-#           asset_name: libs.zip
-#           asset_content_type: application/zip  
+      - name: Deploy to Dropbox
+        if: github.event_name == 'push'
+        uses: aTable/deploy-to-dropbox@v1.0.7
+        with:
+          DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
+          DROPBOX_DESTINATION_PATH_PREFIX: "/UltimateMangaReader"
+          GLOB: "UltimateMangaReader/**/*.*"
