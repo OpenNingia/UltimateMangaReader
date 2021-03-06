@@ -76,10 +76,20 @@ jobs:
           asset_name: UltimateMangaReader
           asset_content_type: application/octet-stream
           
-      - name: Deploy to Dropbox
+      #- name: Deploy to Dropbox
+      #  if: github.event_name == 'push'
+      #  uses: aTable/deploy-to-dropbox@v1.0.7
+      #  with:
+      #    DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
+      #    DROPBOX_DESTINATION_PATH_PREFIX: "/UltimateMangaReader"
+      #    GLOB: "UltimateMangaReader/**/*.*"
+
+      - name: Deploy to Dropbox2
         if: github.event_name == 'push'
-        uses: aTable/deploy-to-dropbox@v1.0.7
+        uses: deka0106/upload-to-dropbox@v2
         with:
-          DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
-          DROPBOX_DESTINATION_PATH_PREFIX: "/UltimateMangaReader"
-          GLOB: "UltimateMangaReader/**/*.*"
+          dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
+          src: UltimateMangaReader/**/*
+          dest: /UltimateMangaReader/
+          multiple: true
+
