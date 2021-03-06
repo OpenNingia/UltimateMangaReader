@@ -82,7 +82,7 @@ jobs:
       #  with:
       #    DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
       #    DROPBOX_DESTINATION_PATH_PREFIX: "/UltimateMangaReader"
-      #    GLOB: "UltimateMangaReader/**/*.*"
+      #    GLOB: "./**/*.*"
 
       - name: Deploy to Dropbox2
         if: github.event_name == 'push'
